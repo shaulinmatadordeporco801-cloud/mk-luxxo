@@ -155,20 +155,40 @@ function Toast({ show }) {
 
 /* ── COMPONENTS ────────────────────────────────────────────── */
 function Header({ solid, cartCount, onCartOpen }) {
+    const [menuOpen, setMenuOpen] = useState(false)
+    const toggleMenu = () => setMenuOpen(!menuOpen)
+
     return (
-        <header className={`header ${solid ? 'solid' : ''}`}>
-            <a href="#hero" style={{ display: 'flex', alignItems: 'center' }}>
+        <header className={`header ${solid ? 'solid' : ''} ${menuOpen ? 'menu-open' : ''}`}>
+            <a href="#hero" style={{ display: 'flex', alignItems: 'center' }} onClick={() => setMenuOpen(false)}>
                 <img src="/logo.png" alt="MK LUXXO — Moda Feminina" className="header-logo" />
             </a>
-            <nav className="nav">
-                <a href="#catalog">Coleções</a>
-                <a href="#lookbook">Lookbook</a>
-                <a href="#about">Sobre</a>
+
+            <nav className={`nav ${menuOpen ? 'open' : ''}`}>
+                <div className="mobile-menu-header">
+                    <img src="/logo.png" alt="MK LUXXO" height="40" />
+                    <button className="menu-btn" onClick={toggleMenu}>✕</button>
+                </div>
+                <a href="#catalog" onClick={toggleMenu}>Coleções</a>
+                <a href="#lookbook" onClick={toggleMenu}>Lookbook</a>
+                <a href="#about" onClick={toggleMenu}>Sobre</a>
                 <a href="https://www.instagram.com/_mk_luxxo__/" target="_blank" rel="noreferrer">Instagram</a>
-                <button className="nav-bag" onClick={onCartOpen} style={{ cursor: 'pointer' }}>
-                    Sacola {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-                </button>
             </nav>
+
+            <div className="header-actions">
+                <button className="nav-bag" onClick={onCartOpen} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span className="desktop-only text-label">Sacola</span>
+                    {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+                </button>
+                <button className="menu-btn mobile-only" onClick={toggleMenu} aria-label="Menu">
+                    {menuOpen ? '✕' : '☰'}
+                </button>
+            </div>
         </header>
     )
 }
